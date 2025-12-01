@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            VERSION=${GITHUB_REF#refs/tags/v}
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Generate changelog
+        id: changelog
+        run: |
+          CHANGELOG=$(git log --pretty=format:"- %s (%h)" $(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")..HEAD)
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        continue-on-error: true
+      
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          release_name: Release v${{ steps.version.outputs.version }}
+          body: |
+            ## Release v${{ steps.version.outputs.version }}
+            
+            ### Changes
+            ${{ steps.changelog.outputs.changelog }}
+            
+            ### Installation
+            ```bash
+            npm install
+            ```
+            
+            ### Migration
+            If this release includes database migrations, run:
+            ```bash
+            supabase db push
+            ```
+          draft: false
+          prerelease: false
+      
+      - name: Notify team
+        uses: rjstone/discord-webhook-notify@v1
+        if: always()
+        with:
+          severity: ${{ job.status }}
+          description: 'Release v${{ steps.version.outputs.version }} created'
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+        continue-on-error: true
+

@@ -1,0 +1,73 @@
+# Beach Football Tournament - Cursor AI Rules
+
+## Project Context
+You are building a Progressive Web Application for managing beach football tournaments.
+This is a full-stack TypeScript project with React frontend and Supabase backend.
+
+## Technology Stack
+- Frontend: React 18 + TypeScript + Vite
+- UI: Tailwind CSS + shadcn/ui
+- Backend: Supabase (PostgreSQL + Realtime + Auth + Storage)
+- Deployment: Vercel
+- CI/CD: GitHub Actions
+
+## Code Standards
+- Always use TypeScript with strict mode
+- Follow functional React components with hooks
+- Use Tailwind CSS for styling (no CSS modules)
+- Implement proper error handling with try-catch
+- Add TypeScript JSDoc comments for complex functions
+- Use conventional commits format
+
+## Testing Requirements
+- Write unit tests with Vitest for utilities
+- Write integration tests for API calls
+- Ensure >80% code coverage for critical paths
+
+## File Organization
+- Components in /components with subfolders by feature
+- Custom hooks in /hooks
+- Types in /types
+- Utils in /lib
+- Pages in /pages
+
+## Database
+- Always use Supabase client from @/lib/supabase
+- Use TypeScript types generated from database schema
+- Implement Row Level Security (RLS) policies
+- Use database triggers for auto-calculations
+
+## Real-time Features
+- Subscribe to Supabase Realtime for live updates
+- Implement proper cleanup in useEffect
+- Handle connection errors gracefully
+
+## Naming Conventions
+- Components: PascalCase (e.g., StandingsTable)
+- Files: kebab-case (e.g., standings-table.tsx)
+- Functions: camelCase (e.g., fetchStandings)
+- Constants: UPPER_SNAKE_CASE (e.g., MAX_FILE_SIZE)
+
+## Security
+- Never commit .env files
+- Always validate user input
+- Sanitize data before database queries
+- Use Supabase RLS for data access control
+
+## Performance
+- Lazy load components when appropriate
+- Optimize images (WebP, lazy loading)
+- Use React Query for data caching
+- Implement pagination for large datasets
+
+## Accessibility
+- Use semantic HTML
+- Include ARIA labels where needed
+- Ensure keyboard navigation works
+- Maintain color contrast ratios
+
+## Error Handling
+- Display user-friendly error messages
+- Log errors to console in development
+- Send errors to Sentry in production
+- Implement fallback UI for errors

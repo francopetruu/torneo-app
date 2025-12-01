@@ -1,0 +1,42 @@
+{
+  "name": "torneo-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Beach Football Tournament Management System",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/client",
+    "dev:client": "npm run dev --workspace=apps/client",
+    "dev:admin": "npm run dev --workspace=apps/admin",
+    "dev:all": "npm run dev:client & npm run dev:admin",
+    "build": "npm run build --workspaces",
+    "build:client": "npm run build --workspace=apps/client",
+    "build:admin": "npm run build --workspace=apps/admin",
+    "lint": "npm run lint --workspaces",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "type-check": "npm run type-check --workspaces",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:reset": "supabase db reset",
+    "supabase:types": "supabase gen types typescript --local > apps/client/src/types/database.types.ts && copy apps\\client\\src\\types\\database.types.ts apps\\admin\\src\\types\\database.types.ts",
+    "db:start": "npx supabase@latest start",
+    "db:reset": "npx supabase@latest db reset",
+    "db:types": "npx supabase@latest gen types typescript --local > apps/client/src/types/database.types.ts && copy apps\\client\\src\\types\\database.types.ts apps\\admin\\src\\types\\database.types.ts",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.11"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}
