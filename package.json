@@ -28,7 +28,7 @@
     "db:start": "npx supabase@latest start",
     "db:reset": "npx supabase@latest db reset",
     "db:types": "npx supabase@latest gen types typescript --local > apps/client/src/types/database.types.ts && copy apps\\client\\src\\types\\database.types.ts apps\\admin\\src\\types\\database.types.ts",
-    "prepare": "husky"
+    "prepare": "node scripts/prepare.js"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
