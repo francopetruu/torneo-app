@@ -23,7 +23,11 @@ interface UseRealtimeMatchesProps {
  * @param onUpdate - Callback when matches are updated
  * @param statusFilter - Optional filter by match status
  */
-export function useRealtimeMatches({ matches, onUpdate, statusFilter }: UseRealtimeMatchesProps) {
+export function useRealtimeMatches({
+  matches: _matches,
+  onUpdate,
+  statusFilter,
+}: UseRealtimeMatchesProps) {
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   useEffect(() => {

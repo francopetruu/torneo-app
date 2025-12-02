@@ -19,7 +19,10 @@ const TOP_SCORERS_LIMIT = 20;
  * @param topScorers - Current top scorers data
  * @param onUpdate - Callback when top scorers are updated
  */
-export function useRealtimeTopScorers({ topScorers, onUpdate }: UseRealtimeTopScorersProps) {
+export function useRealtimeTopScorers({
+  topScorers: _topScorers,
+  onUpdate,
+}: UseRealtimeTopScorersProps) {
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   useEffect(() => {
