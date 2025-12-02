@@ -29,14 +29,18 @@ jobs:
         run: npm ci
       
       - name: Run unit tests
-        run: npm run test --if-present
-        continue-on-error: true
+        run: npm run test
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://test.supabase.co' }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'test-key' }}
       
       - name: Upload coverage reports
         if: matrix.node-version == '20.x'
         uses: codecov/codecov-action@v4
         with:
-          files: ./coverage/lcov.info
+          files: |
+            apps/client/coverage/lcov.info
+            apps/admin/coverage/lcov.info
           flags: unittests
           name: codecov-umbrella
         continue-on-error: true
