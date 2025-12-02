@@ -136,3 +136,4 @@ CREATE POLICY "Banners are deletable by authenticated users"
 
 
 
+
