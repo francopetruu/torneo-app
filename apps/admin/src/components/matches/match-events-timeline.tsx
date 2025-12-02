@@ -128,7 +128,6 @@ export default function MatchEventsTimeline({
 
   // Validate player belongs to team
   const validatePlayer = (playerId: string, team: "home" | "away"): boolean => {
-    const teamId = team === "home" ? match.home_team_id : match.away_team_id;
     const players = team === "home" ? homePlayers : awayPlayers;
     return players.some((p) => p.id === playerId);
   };
