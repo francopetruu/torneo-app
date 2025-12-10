@@ -62,7 +62,7 @@ export default function MatchManagementPage() {
       if (error) throw error;
 
       setMatches(
-        (data || []).map((match: any) => ({
+        (data || []).map((match) => ({
           ...match,
           home_team: match.home_team as Team,
           away_team: match.away_team as Team,
@@ -116,6 +116,7 @@ export default function MatchManagementPage() {
     return () => {
       supabase.removeChannel(channel);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedMatch]);
 
   const handleCreate = () => {

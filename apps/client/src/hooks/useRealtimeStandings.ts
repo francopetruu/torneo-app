@@ -13,7 +13,10 @@ interface UseRealtimeStandingsProps {
  * @param standings - Current standings data
  * @param onUpdate - Callback when standings are updated
  */
-export function useRealtimeStandings({ standings, onUpdate }: UseRealtimeStandingsProps) {
+export function useRealtimeStandings({
+  standings: _standings,
+  onUpdate,
+}: UseRealtimeStandingsProps) {
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   useEffect(() => {

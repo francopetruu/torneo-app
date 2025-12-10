@@ -77,7 +77,7 @@ export default function MatchEventsTimeline({
       if (error) throw error;
 
       setEvents(
-        (data || []).map((event: any) => ({
+        (data || []).map((event) => ({
           ...event,
           player: event.player as Player,
         }))
@@ -115,6 +115,7 @@ export default function MatchEventsTimeline({
   useEffect(() => {
     fetchEvents();
     fetchPlayers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [match.id, refreshTrigger]);
 
   // Reset form
@@ -128,7 +129,6 @@ export default function MatchEventsTimeline({
 
   // Validate player belongs to team
   const validatePlayer = (playerId: string, team: "home" | "away"): boolean => {
-    const teamId = team === "home" ? match.home_team_id : match.away_team_id;
     const players = team === "home" ? homePlayers : awayPlayers;
     return players.some((p) => p.id === playerId);
   };

@@ -1,9 +1,6 @@
 import { describe, it, expect } from "vitest";
 import type { Database } from "@/types/database.types";
 
-type Match = Database["public"]["Tables"]["matches"]["Row"];
-type Team = Database["public"]["Tables"]["teams"]["Row"];
-
 /**
  * Test data transformation utilities
  */
@@ -78,7 +75,7 @@ describe("Data Transformations", () => {
 
   describe("Match grouping by date", () => {
     it("should group matches by date", () => {
-      const matches: Match[] = [
+      const matches: Database["public"]["Tables"]["matches"]["Row"][] = [
         {
           id: "1",
           match_date: "2024-01-15T10:00:00Z",
@@ -117,7 +114,7 @@ describe("Data Transformations", () => {
         },
       ];
 
-      const grouped: Record<string, Match[]> = {};
+      const grouped: Record<string, Database["public"]["Tables"]["matches"]["Row"][]> = {};
       matches.forEach((match) => {
         const date = new Date(match.match_date);
         const dateKey = date.toLocaleDateString("en-US", {

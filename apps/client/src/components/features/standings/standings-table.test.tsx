@@ -50,7 +50,7 @@ describe("StandingsTable", () => {
   });
 
   it("should display loading state", () => {
-    (useStandings as any).mockReturnValue({
+    (useStandings as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       standings: [],
       loading: true,
       error: null,
@@ -62,13 +62,15 @@ describe("StandingsTable", () => {
   });
 
   it("should display error state", () => {
-    (useStandings as any).mockReturnValue({
+    (useStandings as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       standings: [],
       loading: false,
       error: new Error("Failed to load"),
     });
 
-    (useRealtimeStandings as any).mockImplementation(() => {});
+    (
+      useRealtimeStandings as unknown as { mockImplementation: (fn: () => void) => void }
+    ).mockImplementation(() => {});
 
     render(<StandingsTable />);
 
@@ -76,13 +78,15 @@ describe("StandingsTable", () => {
   });
 
   it("should display empty state", () => {
-    (useStandings as any).mockReturnValue({
+    (useStandings as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       standings: [],
       loading: false,
       error: null,
     });
 
-    (useRealtimeStandings as any).mockImplementation(() => {});
+    (
+      useRealtimeStandings as unknown as { mockImplementation: (fn: () => void) => void }
+    ).mockImplementation(() => {});
 
     render(<StandingsTable />);
 
@@ -90,41 +94,51 @@ describe("StandingsTable", () => {
   });
 
   it("should render standings table", async () => {
-    (useStandings as any).mockReturnValue({
+    (useStandings as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       standings: mockStandings,
       loading: false,
       error: null,
     });
 
-    (useRealtimeStandings as any).mockImplementation(() => {});
+    (
+      useRealtimeStandings as unknown as { mockImplementation: (fn: () => void) => void }
+    ).mockImplementation(() => {});
 
     render(<StandingsTable />);
 
     await waitFor(() => {
-      expect(screen.getByText("Team A")).toBeInTheDocument();
-      expect(screen.getByText("Team B")).toBeInTheDocument();
+      // Both desktop table and mobile cards render, so use getAllByText
+      const teamA = screen.getAllByText("Team A");
+      expect(teamA.length).toBeGreaterThan(0);
+      const teamB = screen.getAllByText("Team B");
+      expect(teamB.length).toBeGreaterThan(0);
     });
 
-    // Check table headers
+    // Check table headers (desktop view)
     expect(screen.getByText("Pos")).toBeInTheDocument();
     expect(screen.getByText("Team")).toBeInTheDocument();
     expect(screen.getByText("Pts")).toBeInTheDocument();
   });
 
   it("should display team statistics", async () => {
-    (useStandings as any).mockReturnValue({
+    (useStandings as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       standings: mockStandings,
       loading: false,
       error: null,
     });
 
-    (useRealtimeStandings as any).mockImplementation(() => {});
+    (
+      useRealtimeStandings as unknown as { mockImplementation: (fn: () => void) => void }
+    ).mockImplementation(() => {});
 
     render(<StandingsTable />);
 
     await waitFor(() => {
-      expect(screen.getByText("10")).toBeInTheDocument(); // Points
-      expect(screen.getByText("5")).toBeInTheDocument(); // Matches played
+      // Both desktop table and mobile cards render, so use getAllByText
+      const points = screen.getAllByText("10");
+      expect(points.length).toBeGreaterThan(0); // Points appear in both views
+      const matches = screen.getAllByText("5");
+      expect(matches.length).toBeGreaterThan(0); // Matches played appear in both views
     });
   });
 });

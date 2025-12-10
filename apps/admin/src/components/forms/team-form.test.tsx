@@ -1,8 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "../../../test/utils";
+import { render, screen, waitFor } from "../../test/utils";
 import userEvent from "@testing-library/user-event";
 import TeamForm from "./team-form";
-import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 import type { Database } from "@/types/database.types";
 
@@ -27,7 +26,7 @@ describe("TeamForm", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (useToast as any).mockReturnValue({
+    (useToast as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       toast: mockToast,
       toasts: [],
       dismiss: vi.fn(),
@@ -100,15 +99,18 @@ describe("TeamForm", () => {
       <TeamForm team={null} open={true} onOpenChange={mockOnOpenChange} onSuccess={mockOnSuccess} />
     );
 
-    const fileInput = screen.getByLabelText(/team logo/i);
+    // Find the file input by its type since label association might not work with the div wrapper
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    expect(fileInput).toBeInTheDocument();
+
     await user.upload(fileInput, file);
 
     // File should be selected
-    expect(fileInput).toHaveProperty("files");
+    expect(fileInput.files).toHaveLength(1);
+    expect(fileInput.files?.[0]).toBe(file);
   });
 
   it("should validate file size", async () => {
-    const user = userEvent.setup();
     // Create a file larger than 200KB
     const largeFile = new File(["x".repeat(300000)], "large.png", {
       type: "image/png",
@@ -118,35 +120,84 @@ describe("TeamForm", () => {
       <TeamForm team={null} open={true} onOpenChange={mockOnOpenChange} onSuccess={mockOnSuccess} />
     );
 
-    const fileInput = screen.getByLabelText(/team logo/i);
-    await user.upload(fileInput, largeFile);
+    // Find the file input by its type since label association might not work with the div wrapper
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    expect(fileInput).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(mockToast).toHaveBeenCalledWith(
-        expect.objectContaining({
-          title: "File too large",
-        })
-      );
+    // Create a FileList-like object
+    const fileList = {
+      0: largeFile,
+      length: 1,
+      item: (index: number) => (index === 0 ? largeFile : null),
+      [Symbol.iterator]: function* () {
+        yield largeFile;
+      },
+    } as unknown as FileList;
+
+    // Use Object.defineProperty to set files
+    Object.defineProperty(fileInput, "files", {
+      value: fileList,
+      writable: false,
+      configurable: true,
     });
+
+    // Trigger change event directly
+    const changeEvent = new Event("change", { bubbles: true });
+    fileInput.dispatchEvent(changeEvent);
+
+    await waitFor(
+      () => {
+        expect(mockToast).toHaveBeenCalledWith(
+          expect.objectContaining({
+            title: "File too large",
+          })
+        );
+      },
+      { timeout: 2000 }
+    );
   });
 
   it("should validate file type", async () => {
-    const user = userEvent.setup();
     const invalidFile = new File(["test"], "test.txt", { type: "text/plain" });
 
     render(
       <TeamForm team={null} open={true} onOpenChange={mockOnOpenChange} onSuccess={mockOnSuccess} />
     );
 
-    const fileInput = screen.getByLabelText(/team logo/i);
-    await user.upload(fileInput, invalidFile);
+    // Find the file input by its type since label association might not work with the div wrapper
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    expect(fileInput).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(mockToast).toHaveBeenCalledWith(
-        expect.objectContaining({
-          title: "Invalid file type",
-        })
-      );
+    // Create a FileList-like object
+    const fileList = {
+      0: invalidFile,
+      length: 1,
+      item: (index: number) => (index === 0 ? invalidFile : null),
+      [Symbol.iterator]: function* () {
+        yield invalidFile;
+      },
+    } as unknown as FileList;
+
+    // Use Object.defineProperty to set files
+    Object.defineProperty(fileInput, "files", {
+      value: fileList,
+      writable: false,
+      configurable: true,
     });
+
+    // Trigger change event directly
+    const changeEvent = new Event("change", { bubbles: true });
+    fileInput.dispatchEvent(changeEvent);
+
+    await waitFor(
+      () => {
+        expect(mockToast).toHaveBeenCalledWith(
+          expect.objectContaining({
+            title: "Invalid file type",
+          })
+        );
+      },
+      { timeout: 2000 }
+    );
   });
 });

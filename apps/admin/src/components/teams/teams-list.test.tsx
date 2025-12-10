@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "../../../test/utils";
+import { render, screen, waitFor } from "../../test/utils";
 import TeamsList from "./teams-list";
 import { supabase } from "@/lib/supabase";
 import type { Database } from "@/types/database.types";
@@ -45,7 +45,7 @@ describe("TeamsList", () => {
       }),
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: mockSelect,
     });
 
@@ -59,7 +59,7 @@ describe("TeamsList", () => {
       order: vi.fn().mockRejectedValue(new Error("Failed to fetch")),
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: mockSelect,
     });
 
@@ -78,7 +78,7 @@ describe("TeamsList", () => {
       }),
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: mockSelect,
     });
 
@@ -97,7 +97,7 @@ describe("TeamsList", () => {
       }),
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: mockSelect,
     });
 
@@ -122,7 +122,7 @@ describe("TeamsList", () => {
       }),
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: mockSelect,
     });
 
@@ -147,7 +147,7 @@ describe("TeamsList", () => {
       }),
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: mockSelect,
     });
 

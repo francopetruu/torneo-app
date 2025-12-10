@@ -23,7 +23,7 @@ export const createMockSupabaseClient = () => {
   };
 };
 
-export const mockSupabaseResponse = <T>(data: T | null, error: any = null) => ({
+export const mockSupabaseResponse = <T>(data: T | null, error: unknown | null = null) => ({
   data,
   error,
   count: null,

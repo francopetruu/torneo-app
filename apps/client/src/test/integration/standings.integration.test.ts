@@ -41,11 +41,20 @@ describe("Standings Integration Tests", () => {
       }),
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: mockSelect,
     });
 
-    const { data, error } = await (supabase.from as any)("standings")
+    const { data, error } = await (
+      supabase.from as unknown as (table: string) => {
+        select: (columns: string) => {
+          order: (
+            column: string,
+            options: { ascending: boolean }
+          ) => Promise<{ data: Standing[] | null; error: unknown }>;
+        };
+      }
+    )("standings")
       .select("*")
       .order("position", { ascending: true });
 
@@ -64,11 +73,20 @@ describe("Standings Integration Tests", () => {
       }),
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: mockSelect,
     });
 
-    const { data, error } = await (supabase.from as any)("standings")
+    const { data, error } = await (
+      supabase.from as unknown as (table: string) => {
+        select: (columns: string) => {
+          order: (
+            column: string,
+            options: { ascending: boolean }
+          ) => Promise<{ data: Standing[] | null; error: unknown }>;
+        };
+      }
+    )("standings")
       .select("*")
       .order("position", { ascending: true });
 

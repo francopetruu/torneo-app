@@ -54,13 +54,15 @@ describe("MatchesList", () => {
   });
 
   it("should display loading state", () => {
-    (useMatches as any).mockReturnValue({
+    (useMatches as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       matches: [],
       loading: true,
       error: null,
     });
 
-    (useRealtimeMatches as any).mockImplementation(() => {});
+    (
+      useRealtimeMatches as unknown as { mockImplementation: (fn: () => void) => void }
+    ).mockImplementation(() => {});
 
     render(<MatchesList />);
 
@@ -68,13 +70,15 @@ describe("MatchesList", () => {
   });
 
   it("should display error state", () => {
-    (useMatches as any).mockReturnValue({
+    (useMatches as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       matches: [],
       loading: false,
       error: new Error("Failed to load"),
     });
 
-    (useRealtimeMatches as any).mockImplementation(() => {});
+    (
+      useRealtimeMatches as unknown as { mockImplementation: (fn: () => void) => void }
+    ).mockImplementation(() => {});
 
     render(<MatchesList />);
 
@@ -82,13 +86,15 @@ describe("MatchesList", () => {
   });
 
   it("should display empty state", () => {
-    (useMatches as any).mockReturnValue({
+    (useMatches as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       matches: [],
       loading: false,
       error: null,
     });
 
-    (useRealtimeMatches as any).mockImplementation(() => {});
+    (
+      useRealtimeMatches as unknown as { mockImplementation: (fn: () => void) => void }
+    ).mockImplementation(() => {});
 
     render(<MatchesList />);
 
@@ -104,13 +110,15 @@ describe("MatchesList", () => {
       },
     ];
 
-    (useMatches as any).mockReturnValue({
+    (useMatches as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       matches: mockMatches,
       loading: false,
       error: null,
     });
 
-    (useRealtimeMatches as any).mockImplementation(() => {});
+    (
+      useRealtimeMatches as unknown as { mockImplementation: (fn: () => void) => void }
+    ).mockImplementation(() => {});
 
     render(<MatchesList />);
 
@@ -121,13 +129,15 @@ describe("MatchesList", () => {
   });
 
   it("should display filter buttons", () => {
-    (useMatches as any).mockReturnValue({
+    (useMatches as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       matches: [],
       loading: false,
       error: null,
     });
 
-    (useRealtimeMatches as any).mockImplementation(() => {});
+    (
+      useRealtimeMatches as unknown as { mockImplementation: (fn: () => void) => void }
+    ).mockImplementation(() => {});
 
     render(<MatchesList />);
 

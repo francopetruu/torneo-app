@@ -23,7 +23,11 @@ interface UseRealtimeMatchesProps {
  * @param onUpdate - Callback when matches are updated
  * @param statusFilter - Optional filter by match status
  */
-export function useRealtimeMatches({ matches, onUpdate, statusFilter }: UseRealtimeMatchesProps) {
+export function useRealtimeMatches({
+  matches: _matches,
+  onUpdate,
+  statusFilter,
+}: UseRealtimeMatchesProps) {
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   useEffect(() => {
@@ -57,11 +61,13 @@ export function useRealtimeMatches({ matches, onUpdate, statusFilter }: UseRealt
 
           if (!error && data) {
             // Transform the data to match our interface
-            const matchesWithTeams: MatchWithTeams[] = data.map((match: any) => ({
-              ...match,
-              home_team: match.home_team as Team,
-              away_team: match.away_team as Team,
-            }));
+            const matchesWithTeams: MatchWithTeams[] = data.map(
+              (match: Match & { home_team: unknown; away_team: unknown }) => ({
+                ...match,
+                home_team: match.home_team as Team,
+                away_team: match.away_team as Team,
+              })
+            );
             onUpdate(matchesWithTeams);
           }
         }

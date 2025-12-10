@@ -34,4 +34,30 @@ global.IntersectionObserver = class IntersectionObserver {
     return [];
   }
   unobserve() {}
-} as any;
+} as unknown as typeof IntersectionObserver;
+
+// Polyfill for hasPointerCapture (needed for Radix UI Select in jsdom)
+if (!Element.prototype.hasPointerCapture) {
+  Element.prototype.hasPointerCapture = function () {
+    return false;
+  };
+}
+
+if (!Element.prototype.setPointerCapture) {
+  Element.prototype.setPointerCapture = function () {
+    // No-op
+  };
+}
+
+if (!Element.prototype.releasePointerCapture) {
+  Element.prototype.releasePointerCapture = function () {
+    // No-op
+  };
+}
+
+// Polyfill for scrollIntoView (needed for Radix UI Select in jsdom)
+if (!Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = function () {
+    // No-op
+  };
+}

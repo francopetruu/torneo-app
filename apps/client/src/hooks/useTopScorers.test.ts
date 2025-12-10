@@ -67,7 +67,7 @@ describe("useTopScorers", () => {
       order: mockOrder2,
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: vi.fn().mockReturnValue({
         order: mockOrder1,
       }),
@@ -117,7 +117,7 @@ describe("useTopScorers", () => {
       order: mockOrder2,
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: vi.fn().mockReturnValue({
         order: mockOrder1,
       }),
@@ -153,7 +153,7 @@ describe("useTopScorers", () => {
       order: mockOrder2,
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: vi.fn().mockReturnValue({
         order: mockOrder1,
       }),
@@ -194,7 +194,7 @@ describe("useTopScorers", () => {
       order: mockOrder2,
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: vi.fn().mockReturnValue({
         order: mockOrder1,
       }),
