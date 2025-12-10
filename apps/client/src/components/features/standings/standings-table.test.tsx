@@ -107,11 +107,14 @@ describe("StandingsTable", () => {
     render(<StandingsTable />);
 
     await waitFor(() => {
-      expect(screen.getByText("Team A")).toBeInTheDocument();
-      expect(screen.getByText("Team B")).toBeInTheDocument();
+      // Both desktop table and mobile cards render, so use getAllByText
+      const teamA = screen.getAllByText("Team A");
+      expect(teamA.length).toBeGreaterThan(0);
+      const teamB = screen.getAllByText("Team B");
+      expect(teamB.length).toBeGreaterThan(0);
     });
 
-    // Check table headers
+    // Check table headers (desktop view)
     expect(screen.getByText("Pos")).toBeInTheDocument();
     expect(screen.getByText("Team")).toBeInTheDocument();
     expect(screen.getByText("Pts")).toBeInTheDocument();
@@ -131,8 +134,11 @@ describe("StandingsTable", () => {
     render(<StandingsTable />);
 
     await waitFor(() => {
-      expect(screen.getByText("10")).toBeInTheDocument(); // Points
-      expect(screen.getByText("5")).toBeInTheDocument(); // Matches played
+      // Both desktop table and mobile cards render, so use getAllByText
+      const points = screen.getAllByText("10");
+      expect(points.length).toBeGreaterThan(0); // Points appear in both views
+      const matches = screen.getAllByText("5");
+      expect(matches.length).toBeGreaterThan(0); // Matches played appear in both views
     });
   });
 });

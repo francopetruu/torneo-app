@@ -133,6 +133,6 @@ describe("Teams Integration Tests", () => {
     )("team-logos").upload(filePath, file);
 
     expect(uploadError).toBeNull();
-    expect(mockUpload).toHaveBeenCalledWith(filePath, file, expect.any(Object));
+    expect(mockUpload).toHaveBeenCalledWith(filePath, file);
   });
 });

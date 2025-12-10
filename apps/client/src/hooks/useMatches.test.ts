@@ -94,22 +94,21 @@ describe("useMatches", () => {
   });
 
   it("should filter by status when provided", async () => {
-    const mockOrder = vi.fn().mockResolvedValue({
+    const mockEq = vi.fn().mockResolvedValue({
       data: [],
       error: null,
+    });
+
+    const mockOrder = vi.fn().mockReturnValue({
+      eq: mockEq,
     });
 
     const mockSelect = vi.fn().mockReturnValue({
       order: mockOrder,
     });
 
-    const mockEq = vi.fn().mockReturnValue({
-      order: mockOrder,
-    });
-
     (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: mockSelect,
-      eq: mockEq,
     });
 
     renderHook(() => useMatches("finished"));

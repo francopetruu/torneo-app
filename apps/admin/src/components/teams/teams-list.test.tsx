@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "../../../test/utils";
+import { render, screen, waitFor } from "../../test/utils";
 import TeamsList from "./teams-list";
 import { supabase } from "@/lib/supabase";
 import type { Database } from "@/types/database.types";
