@@ -32,14 +32,14 @@ describe("MatchForm", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (useToast as any).mockReturnValue({
+    (useToast as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       toast: mockToast,
       toasts: [],
       dismiss: vi.fn(),
     });
 
     // Mock teams fetch
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: vi.fn().mockReturnValue({
         order: vi.fn().mockResolvedValue({
           data: [

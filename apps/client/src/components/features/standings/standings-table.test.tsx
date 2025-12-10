@@ -50,7 +50,7 @@ describe("StandingsTable", () => {
   });
 
   it("should display loading state", () => {
-    (useStandings as any).mockReturnValue({
+    (useStandings as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       standings: [],
       loading: true,
       error: null,
@@ -62,13 +62,15 @@ describe("StandingsTable", () => {
   });
 
   it("should display error state", () => {
-    (useStandings as any).mockReturnValue({
+    (useStandings as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       standings: [],
       loading: false,
       error: new Error("Failed to load"),
     });
 
-    (useRealtimeStandings as any).mockImplementation(() => {});
+    (
+      useRealtimeStandings as unknown as { mockImplementation: (fn: () => void) => void }
+    ).mockImplementation(() => {});
 
     render(<StandingsTable />);
 
@@ -76,13 +78,15 @@ describe("StandingsTable", () => {
   });
 
   it("should display empty state", () => {
-    (useStandings as any).mockReturnValue({
+    (useStandings as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       standings: [],
       loading: false,
       error: null,
     });
 
-    (useRealtimeStandings as any).mockImplementation(() => {});
+    (
+      useRealtimeStandings as unknown as { mockImplementation: (fn: () => void) => void }
+    ).mockImplementation(() => {});
 
     render(<StandingsTable />);
 
@@ -90,13 +94,15 @@ describe("StandingsTable", () => {
   });
 
   it("should render standings table", async () => {
-    (useStandings as any).mockReturnValue({
+    (useStandings as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       standings: mockStandings,
       loading: false,
       error: null,
     });
 
-    (useRealtimeStandings as any).mockImplementation(() => {});
+    (
+      useRealtimeStandings as unknown as { mockImplementation: (fn: () => void) => void }
+    ).mockImplementation(() => {});
 
     render(<StandingsTable />);
 
@@ -112,13 +118,15 @@ describe("StandingsTable", () => {
   });
 
   it("should display team statistics", async () => {
-    (useStandings as any).mockReturnValue({
+    (useStandings as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       standings: mockStandings,
       loading: false,
       error: null,
     });
 
-    (useRealtimeStandings as any).mockImplementation(() => {});
+    (
+      useRealtimeStandings as unknown as { mockImplementation: (fn: () => void) => void }
+    ).mockImplementation(() => {});
 
     render(<StandingsTable />);
 

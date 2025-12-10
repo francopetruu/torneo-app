@@ -63,7 +63,7 @@ describe("useStandings", () => {
       }),
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: mockSelect,
     });
 
@@ -88,7 +88,7 @@ describe("useStandings", () => {
       }),
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: mockSelect,
     });
 
@@ -110,7 +110,7 @@ describe("useStandings", () => {
       }),
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: mockSelect,
     });
 

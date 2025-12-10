@@ -74,7 +74,7 @@ describe("useMatches", () => {
       order: mockOrder,
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: mockSelect,
       eq: mockEq,
     });
@@ -107,7 +107,7 @@ describe("useMatches", () => {
       order: mockOrder,
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: mockSelect,
       eq: mockEq,
     });
@@ -130,7 +130,7 @@ describe("useMatches", () => {
       order: mockOrder,
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       select: mockSelect,
     });
 

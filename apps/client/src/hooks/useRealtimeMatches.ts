@@ -61,11 +61,13 @@ export function useRealtimeMatches({
 
           if (!error && data) {
             // Transform the data to match our interface
-            const matchesWithTeams: MatchWithTeams[] = data.map((match: any) => ({
-              ...match,
-              home_team: match.home_team as Team,
-              away_team: match.away_team as Team,
-            }));
+            const matchesWithTeams: MatchWithTeams[] = data.map(
+              (match: Match & { home_team: unknown; away_team: unknown }) => ({
+                ...match,
+                home_team: match.home_team as Team,
+                away_team: match.away_team as Team,
+              })
+            );
             onUpdate(matchesWithTeams);
           }
         }

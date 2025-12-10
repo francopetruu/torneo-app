@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "../../../test/utils";
 import userEvent from "@testing-library/user-event";
 import TeamForm from "./team-form";
-import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 import type { Database } from "@/types/database.types";
 
@@ -27,7 +26,7 @@ describe("TeamForm", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (useToast as any).mockReturnValue({
+    (useToast as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       toast: mockToast,
       toasts: [],
       dismiss: vi.fn(),

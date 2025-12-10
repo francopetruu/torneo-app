@@ -1,8 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { supabase } from "@/lib/supabase";
-import type { Database } from "@/types/database.types";
-
-type Team = Database["public"]["Tables"]["teams"]["Row"];
 
 // Mock Supabase for integration tests
 vi.mock("@/lib/supabase", () => ({
@@ -34,11 +31,20 @@ describe("Teams Integration Tests", () => {
       }),
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       insert: mockInsert,
     });
 
-    const { data, error } = await (supabase.from as any)("teams").insert(newTeam).select().single();
+    const { data, error } = await (
+      supabase.from as unknown as (table: string) => {
+        insert: (data: unknown) => {
+          select: () => { single: () => Promise<{ data: unknown; error: unknown }> };
+        };
+      }
+    )("teams")
+      .insert(newTeam)
+      .select()
+      .single();
 
     expect(error).toBeNull();
     expect(data.name).toBe("New Team");
@@ -57,11 +63,19 @@ describe("Teams Integration Tests", () => {
       }),
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       update: mockUpdate,
     });
 
-    const { error } = await (supabase.from as any)("teams").update(updatedTeam).eq("id", "team-id");
+    const { error } = await (
+      supabase.from as unknown as (table: string) => {
+        update: (data: unknown) => {
+          eq: (column: string, value: string) => Promise<{ error: unknown }>;
+        };
+      }
+    )("teams")
+      .update(updatedTeam)
+      .eq("id", "team-id");
 
     expect(error).toBeNull();
   });
@@ -74,11 +88,19 @@ describe("Teams Integration Tests", () => {
       }),
     });
 
-    (supabase.from as any).mockReturnValue({
+    (supabase.from as unknown as { mockReturnValue: (value: unknown) => unknown }).mockReturnValue({
       delete: mockDelete,
     });
 
-    const { error } = await (supabase.from as any)("teams").delete().eq("id", "team-id");
+    const { error } = await (
+      supabase.from as unknown as (table: string) => {
+        delete: () => {
+          eq: (column: string, value: string) => Promise<{ error: unknown }>;
+        };
+      }
+    )("teams")
+      .delete()
+      .eq("id", "team-id");
 
     expect(error).toBeNull();
   });
@@ -97,15 +119,18 @@ describe("Teams Integration Tests", () => {
       },
     });
 
-    (supabase.storage.from as any).mockReturnValue({
+    (
+      supabase.storage.from as unknown as { mockReturnValue: (value: unknown) => unknown }
+    ).mockReturnValue({
       upload: mockUpload,
       getPublicUrl: mockGetPublicUrl,
     });
 
-    const { error: uploadError } = await (supabase.storage.from as any)("team-logos").upload(
-      filePath,
-      file
-    );
+    const { error: uploadError } = await (
+      supabase.storage.from as unknown as (bucket: string) => {
+        upload: (path: string, file: File, options?: unknown) => Promise<{ error: unknown }>;
+      }
+    )("team-logos").upload(filePath, file);
 
     expect(uploadError).toBeNull();
     expect(mockUpload).toHaveBeenCalledWith(filePath, file, expect.any(Object));
