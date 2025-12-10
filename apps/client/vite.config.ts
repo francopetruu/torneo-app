@@ -14,19 +14,62 @@ export default defineConfig({
         name: "Beach Football Tournament",
         short_name: "Torneo",
         description: "Beach Football Tournament Management System",
-        theme_color: "#ffffff",
+        theme_color: "#0ea5e9",
+        background_color: "#ffffff",
+        display: "standalone",
+        orientation: "portrait",
+        start_url: "/",
+        scope: "/",
         icons: [
           {
             src: "pwa-192x192.png",
             sizes: "192x192",
             type: "image/png",
+            purpose: "any maskable",
           },
           {
             src: "pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
+            purpose: "any maskable",
           },
         ],
+      },
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
+        navigateFallback: "/offline.html",
+        navigateFallbackDenylist: [/^\/_/, /\/[^/?]+\.[^/]+$/],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "supabase-api-cache",
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24, // 24 hours
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+              networkTimeoutSeconds: 10,
+            },
+          },
+          {
+            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "images-cache",
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+              },
+            },
+          },
+        ],
+      },
+      devOptions: {
+        enabled: false, // Disable in dev to avoid conflicts
       },
     }),
   ],
