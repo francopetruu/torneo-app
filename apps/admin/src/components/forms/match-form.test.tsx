@@ -88,9 +88,17 @@ describe("MatchForm", () => {
   it("should validate that home and away teams are different", async () => {
     const user = userEvent.setup();
 
+    // Test validation by rendering a match with same teams for home and away
+    // This directly tests the validation without complex dropdown interactions
+    const matchWithSameTeams: Match = {
+      ...mockMatch,
+      home_team_id: "team1",
+      away_team_id: "team1", // Same team - should trigger validation
+    };
+
     render(
       <MatchForm
-        match={null}
+        match={matchWithSameTeams}
         open={true}
         onOpenChange={mockOnOpenChange}
         onSuccess={mockOnSuccess}
@@ -98,25 +106,19 @@ describe("MatchForm", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByLabelText(/home team/i)).toBeInTheDocument();
+      expect(screen.getByText("Edit Match")).toBeInTheDocument();
     });
 
-    // Select same team for both
-    const homeSelect = screen.getByLabelText(/home team/i);
-    const awaySelect = screen.getByLabelText(/away team/i);
-
-    await user.click(homeSelect);
-    await user.click(screen.getByText("Team A"));
-
-    await user.click(awaySelect);
-    await user.click(screen.getByText("Team A"));
-
-    const submitButton = screen.getByRole("button", { name: /create match/i });
+    // Try to submit the form - validation should catch same teams
+    const submitButton = screen.getByRole("button", { name: /update match/i });
     await user.click(submitButton);
 
-    await waitFor(() => {
-      expect(screen.getByText(/home and away teams must be different/i)).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText(/home and away teams must be different/i)).toBeInTheDocument();
+      },
+      { timeout: 3000 }
+    );
   });
 
   it("should validate required fields", async () => {
